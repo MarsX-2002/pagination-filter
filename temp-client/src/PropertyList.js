@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import SpotifyPlayer from './components/SpotifyPlayer';
 
 const PropertyList = () => {
   // Get initial filters from URL parameters
@@ -278,6 +279,8 @@ const PropertyList = () => {
           </div>
         ))}
       </div>
+
+      <SpotifyPlayer />
     </div>
   );
 };

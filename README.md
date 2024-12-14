@@ -12,6 +12,10 @@ A full-stack application for property listings with advanced filtering and pagin
 ![Filter Results](docs/images/filter-results.png)
 *Example of filtered results showing properties with specific amenities*
 
+### Spotify Integration
+![Spotify Player](docs/images/spotify-view.png)
+*Built-in Spotify player with full track access*
+
 ## Features
 
 - Property listing with images and details
@@ -24,6 +28,10 @@ A full-stack application for property listings with advanced filtering and pagin
 - Responsive grid layout
 - Server-side filtering
 - URL-based state persistence
+- Spotify Music Integration:
+  - Embedded Spotify player
+  - Quick access to full tracks
+  - Official Spotify design integration
 
 ## Tech Stack
 

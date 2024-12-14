@@ -186,3 +186,33 @@
   margin-bottom: 20px;
   text-align: center;
 }
+
+.spotify-player {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 300px;
+  z-index: 1000;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  background: white;
+  padding-bottom: 10px;
+}
+
+.open-spotify-btn {
+  display: block;
+  width: 90%;
+  margin: 10px auto;
+  padding: 10px;
+  background: #1DB954;  /* Spotify green */
+  color: white;
+  border: none;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.open-spotify-btn:hover {
+  background: #1ed760;  /* Lighter Spotify green */
+}
