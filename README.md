@@ -5,7 +5,7 @@ A full-stack application for property listings with advanced filtering and pagin
 ## Screenshots
 
 ### Main View with Filters
-![Main View with Filters](docs/images/main-view.png)
+![Main View with Filters](docs/images/updated-main-view.png)
 *Property listing page showing the filter panel and property grid*
 
 ### Filter Results
