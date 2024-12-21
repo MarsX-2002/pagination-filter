@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import SpotifyPlayer from './components/SpotifyPlayer';
 
@@ -30,8 +30,41 @@ const PropertyList = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  // Fetch properties with filters
+  const fetchProperties = React.useCallback(async () => {
+    try {
+      setLoading(true);
+      const params = new URLSearchParams();
+      
+      // Add pagination
+      params.set('page', pagination.currentPage);
+      
+      // Add filters
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== '' && value !== false && value !== null) {
+          params.set(key, value.toString());
+        }
+      });
+
+      const response = await axios.get(`http://localhost:3001/properties?${params.toString()}`);
+      setProperties(response.data.properties);
+      setPagination(prev => ({
+        ...prev,
+        totalPages: response.data.pagination.totalPages,
+        totalItems: response.data.pagination.totalItems,
+        hasNextPage: response.data.pagination.hasNextPage,
+        hasPrevPage: response.data.pagination.hasPrevPage
+      }));
+    } catch (error) {
+      console.error('Error fetching properties:', error);
+      setError('Failed to fetch properties. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
+  }, [filters, pagination.currentPage]);
+
   // Update URL with current filters and pagination
-  const updateURL = (newFilters, newPage) => {
+  const updateURL = useCallback((newFilters, newPage) => {
     const params = new URLSearchParams();
     
     // Add pagination
@@ -50,42 +83,13 @@ const PropertyList = () => {
       '',
       `${window.location.pathname}?${params.toString()}`
     );
-  };
+  }, [filters, pagination.currentPage]);
 
-  // Fetch properties with pagination
-  const fetchProperties = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      
-      const response = await axios.get('http://localhost:3001/properties', {
-        params: {
-          page: pagination.currentPage,
-          limit: pagination.itemsPerPage,
-          ...filters
-        }
-      });
-
-      if (response.data) {
-        console.log('Response from server:', response.data);
-        setProperties(response.data.properties || []);
-        setPagination(prev => ({
-          ...prev,
-          ...(response.data.pagination || {})
-        }));
-      }
-    } catch (error) {
-      console.error('Error details:', {
-        message: error.message,
-        response: error.response,
-        stack: error.stack
-      });
-      setError(error.response?.data?.error || error.message || 'Error fetching properties');
-      setProperties([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Effect for URL updates and initial load
+  useEffect(() => {
+    updateURL();
+    fetchProperties();
+  }, [updateURL, fetchProperties]);
 
   // Handle pagination
   const handlePageChange = (newPage) => {
@@ -124,11 +128,6 @@ const PropertyList = () => {
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
-
-  // Effect for fetching properties
-  useEffect(() => {
-    fetchProperties();
-  }, [pagination.currentPage, filters]);
 
   // Render pagination controls
   const renderPaginationControls = () => {
