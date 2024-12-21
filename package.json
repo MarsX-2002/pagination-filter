@@ -1,0 +1,21 @@
+{
+  "name": "property-filter-app",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "server",
+    "temp-client"
+  ],
+  "scripts": {
+    "start": "node server/index.js",
+    "build": "cd temp-client && npm install && npm run build",
+    "dev": "concurrently \"cd server && npm start\" \"cd temp-client && npm start\"",
+    "install-all": "npm install && cd server && npm install && cd ../temp-client && npm install"
+  },
+  "dependencies": {
+    "concurrently": "^8.0.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

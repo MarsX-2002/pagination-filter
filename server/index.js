@@ -1,8 +1,9 @@
 import express from "express";
-import cors from "cors"; // Add cors for cross-origin requests
+import cors from "cors";
+import path from "path";
 
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 3001;
 
 let dataBase = [
     {
@@ -288,13 +289,22 @@ let dataBase = [
   ];
   
 
-app.use(cors()); // Enable CORS
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' 
+    ? ['https://your-vercel-app-name.vercel.app'] 
+    : ['http://localhost:3000'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(express.json());
-app.use(express.static("public"));
-console.log('Static file serving enabled for /public');
+app.use('/api/public', express.static('public'));
+app.use('/api', express.static('public'));
+
+console.log('Static file serving enabled for /api/public');
 
 // Properties endpoint with filters
-app.get('/properties', (req, res) => {
+app.get('/api/properties', (req, res) => {
   try {
     console.log('Received query params:', req.query);
     
